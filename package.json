@@ -1,0 +1,12 @@
+{
+  "name": "Exercise27",
+  "description": "Exercise27",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "4.x",
+    "body-parser": "*",
+    "path": "*",
+	"fs": "*"
+  }
+}
