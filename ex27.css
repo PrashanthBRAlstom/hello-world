@@ -1,0 +1,14 @@
+.main-div {
+    color: red;
+}
+
+.dropdown {
+    border: 1px solid skyblue;
+    border-radius: 7px;
+    width: 200px;
+    box-shadow: 0 0 4px 4px skyblue;
+}
+
+#selectHtml {
+    margin: 10px 0;
+}

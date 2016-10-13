@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8"></meta>
+    <link href="ex27.css" rel="stylesheet" />
+    <script src="../public/jquery-3.1.1/jquery-3.1.1.js"></script>
+    <script src="http://cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>
+        var theApp = {
+            start_action: function () {
+                theApp.loadHTMLList();
+                $(".dropdown").change(theApp.loadSelectedHtml);
+                tinymce.init({
+                    selector: '#main'
+                    , plugins: 'preview save autoresize'
+                    , toolbar: 'preview save'
+                    , body_class: 'main-div'
+                    , content_css: 'ex27.css'
+                    , save_onsavecallback: function () {
+                        var edContent = tinyMCE.get('main').getContent();
+                        var postData = {};
+                        postData.main = edContent;
+                        $.post('/SaveHtml', postData, function (data) {
+                            alert(data);
+                        });
+                        theApp.loadHTMLList();
+                    }
+                });
+            }
+            , loadHTMLList: function () {
+                $.get("/GetHtmls", function (data) {
+                    $(".dropdown").empty();
+                    $(".dropdown").append('<option value="null"> --- </option>');
+                    $.each(data, function (key, value) {
+                        $(".dropdown").append("<option value='" + value + "'>" + value + "</option>");
+                    });
+                });
+            }
+            , loadSelectedHtml: function (e) {
+                var selectedHtml = {};
+                selectedHtml.value = e.target.value;
+                $.post("/loadHtml", selectedHtml, function (data) {
+                    tinyMCE.activeEditor.setContent(data);
+                }).fail(function (err) {
+                    console.log(err.responseText);
+                    tinyMCE.activeEditor.setContent("");
+                });
+            }
+        }
+        $(document).ready(theApp.start_action);
+    </script>
+</head>
+
+<body>
+    <div id="selectHtml">
+        <label>Select the HTML to load: </label>
+        <select class="dropdown"> </select>
+    </div>
+    <form id="mainForm" method="post">
+        <div id="main"> </div>
+    </form>
+</body>
+
+</html>
